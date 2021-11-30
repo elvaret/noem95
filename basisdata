@@ -1,0 +1,234 @@
+-- Tugas_Basis_Data
+-- Dari studi kasus yang anda jadikan sebagai tugas akhir mata kuliah ini, 
+-- buatlah relasi antar beberapa table dan buatlah sintax sql dengan menggunakan 
+-- subquery dan alias. Jangan lupa menampilkan hasilnya dalam file .jpg
+
+
+-- Menggunakan where clause
+select * from products
+where id_category = 1;
+
+select * from products
+where id_category = 3;
+
+select*from products where name_products !='Head Unit';
+
+select * from products
+where price between 2000000 and 3000000;
+
+
+
+-- Menggunakan alias
+select 
+	id_products 	as	'Kode',
+    name_products 	as 	'Nama',
+    price		    as	'Harga',
+	quantity	    as	'Stok'
+from products;
+
+select 
+	p.id_products   as	'Kode',
+    p.name_products	as 	'Nama',
+    p.price		as	'Harga',
+	p.quantity	as	'Stok'
+from products as p;
+
+SELECT * FROM products;
+describe products;
+
+
+-- relasi table one to one (table 
+-- Table Customer
+create table customers
+(
+	id			int	not null auto_increment,
+    email		varchar(100)not null,
+    nama_depan	varchar(100)not null,
+    nama_belakang	varchar(100),
+    primary key(id),
+    unique key email_unique (email)
+)engine=InnoDB;
+select * from customers;
+describe customers;
+drop table customers;
+
+
+-- memasukkan data customer
+insert into customers (email,nama_depan,nama_belakang)
+values('agi@gmail.com', 'Agi','Jurniawan');
+insert into customers (email,nama_depan,nama_belakang)
+values('nurma@gmail.com', 'Nurma','Dewi');
+insert into customers (email,nama_depan,nama_belakang)
+values('angelee@gmail.com', 'Angelee','jeli');
+insert into customers (email,nama_depan,nama_belakang)
+values('dono@gmail.com', 'Dono','Setiawan');
+insert into customers (email,nama_depan,nama_belakang)
+values('elvaret@gmail.com', 'Elvaret','');
+insert into customers (email,nama_depan,nama_belakang)
+values('rima@gmail.com', 'Rima','Narumiya');
+insert into customers (email,nama_depan,nama_belakang)
+values('rehab@gmail.com', 'Rehab','Biaban');
+insert into customers (email,nama_depan,nama_belakang)
+values('elvina@gmail.com', 'Elvina','Tarioka');
+insert into customers (email,nama_depan,nama_belakang)
+values('yoga@gmail.com', 'Yoga','Gaman');
+insert into customers (email,nama_depan,nama_belakang)
+values('heeyaa@gmail.com', 'Heeyaa','Huya');
+
+alter table customers
+add column NIK varchar (16)
+after id;
+alter table customers
+modify NIK varchar (16) not null default 0;
+
+update customers 
+set NIK = '3221072204140002'
+where id = '1';
+
+update customers 
+set NIK = '3221072204140012'
+where id = '2';
+
+update customers 
+set NIK = '3521072204140003'
+where id = '3';
+
+update customers 
+set NIK = '3721072204140004'
+where id = '4';
+
+update customers 
+set NIK = '3821072204140005'
+where id = '5';
+
+update customers 
+set NIK = '3621072204140006'
+where id = '6';
+
+update customers 
+set NIK = '3121072204140007'
+where id = '7';
+
+update customers 
+set NIK = '3451072204140008'
+where id = '8';
+
+update customers 
+set NIK = '3421072204140009'
+where id = '9';
+
+update customers 
+set NIK = '3321072204140010'
+where id = '10';
+
+-- Table wallet
+use penjualan_otopart;
+create table wallet
+(	
+	id			int not null auto_increment,
+	id_customer	int not null,
+    balance		int not null default 0,
+    primary key(id),
+    unique key id_customer_unique (id_customer),
+    constraint fk_wallet_customer
+		foreign key (id_customer) references customers (id)
+)engine = innoDB;
+insert into wallet (id_customer) 
+values (1),(2),(3),(4),(5),(6),(7),(8),(9),(10);
+
+drop table struk;
+
+-- Tabel relasi
+select * from wallet;
+describe wallet;
+select customers.email, wallet.balance
+from wallet join customers on (wallet.id_customer= customers.id);
+
+
+
+
+
+-- relasi table one to many
+
+-- Table Category
+use penjualan_otopart;
+
+create table categories
+(
+	id			int		not null,
+    name		varchar(100)	not null,
+    primary key (id)
+)engine = InnoDB;
+describe table categories;
+select * from categories;
+drop table categories;
+
+insert into categories(id, name) values
+('0001','Head Unit'),
+('0002','Speaker'),
+('0003','Lampu');
+
+update products
+set id_category ='0001'
+where id_products In ('1111','1112','1113','1114','1115','1116','1117','1118','1119','1120');
+
+update products
+set id_category ='0002'
+where id_products In ('2111','2112','2113');
+
+update products
+set id_category ='0003'
+where id_products In ('3111','3112');
+
+select products.id_products, products.name_products, categories.name
+from products
+join categories on (categories.id = products.id_category);
+
+-- Table Product
+use penjualan_otopart;
+
+create table products
+(
+id_products int not null,
+name_products varchar(100) not null,
+description text,
+price int unsigned not null,
+quantity int unsigned not null default 0,
+primary key (id_products)
+)engine=innoDB; 
+
+describe table products;
+drop table products;
+select *from products;
+
+insert into products(id_products, name_products, description, price, quantity)
+values ('1111','Head Unit Android Auto carPlay 9" inch PRO+DVR Datsun Go Orca','4+64GB', 5299000, 5),
+	   ('1112','Head Unit Android Auto CarPlay 9" inch Pro+DVR Harrier 2004-2013','4+64GB',4899000,5),
+       ('1113','Head Unit Android Auto CarPlay 9" inch PRO+ Plus Grand New Avanza/Xenia 2019-2020 ORCA','4+64GB','4699000',5),
+       ('1114','Head Unit Android Auto CarPlay 9" inch PRO+ Plus Avanza/Xenia ORCA','4+64GB',4899000,5),
+       ('1115','Head Unit Android Auto CarPlay 9" inch PRO+ Plus AGYA/AYLA ORCA','4+64GB',4899000,5),
+       ('1116','Head Unit Android Auto CarPlay 7" inch PRO+ Plus Suzuki Grand Vitara ORCA','2+32GB',3199000,5),
+       ('1117','Head Unit Android Auto CarPlay 7" inch PRO+ Plus Toyota YARIS 2005-2013 ORCA','2+32GB',3099000,5),
+       ('1118','Head Unit Android 9" inch Toyota YARIS 2005-2013 ORCA ECO','2+16GB',2099000,5),
+       ('1119','Head Unit Android 9" inch RUSH/TERIOS 2011-2017 ORCA ECO','2+16GB',2299000,5),
+       ('1120','Head Unit Android Auto CarPlay 9" inch Suzuki Ertiga/XL7 2018-2021 ORCA','2+32GB',3199000,5),
+       ('2111','Speaker Subwofer 8" inch','',3650000,3),
+       ('2112','Speaker Split Component','3 Way (Midbass + Midrange + Tweeter)',3299000,4),
+       ('2113','Speaker Split 2 Way Cello Audio Performance PRO (2021)','2 Way (Midbass + Midrange)',2699000,6),
+       ('3111','Lampu Mobil LED Philips H8','',1399000,10),
+       ('3112','Lampu Mobil LED Carbon P2 5700K','',1499000,12);
+alter table products
+add column id_category int;
+
+
+alter table products
+    add constraint fk_products_categories
+        foreign key (id_category) references categories(id);
+
+show create table products;
+
+
+
+
+
+
